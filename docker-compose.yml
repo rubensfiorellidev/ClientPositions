@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16
+    container_name: financial-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: positionsdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d positionsdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  importer:
+    build:
+      context: .
+      dockerfile: Positions.ConsoleApp/Dockerfile
+    depends_on:
+      - postgres
+    restart: "no"
+    environment:
+      ConnectionStrings__NPSqlConnection: "Host=postgres;Port=5432;Database=positionsdb;Username=admin;Password=admin;Pooling=true;MinPoolSize=10;MaxPoolSize=100;Connection Idle Lifetime=60;Timeout=60;Include Error Detail=true"
+      EXTERNALAPI__URL: "https://api.andbank.com.br/candidate/positions"
+      EXTERNALAPI__KEY: "${EXTERNALAPI_KEY}"
+      EXTERNALAPI__USEMOCK: "false"
+      EXTERNALAPI__BATCHSIZE: "5000"
+      EXTERNALAPI__TRUNCATEBEFOREIMPORT: "true"
+      DOTNET_ENVIRONMENT: "Development"
+
+volumes:
+  pgdata:
