@@ -10,5 +10,7 @@ RUN dotnet publish -c Release -o /app /p:UseAppHost=false
 FROM mcr.microsoft.com/dotnet/runtime:8.0
 WORKDIR /app
 COPY --from=build /app .
+ENV ASPNETCORE_URLS=http://+:8080
 ENV DOTNET_ENVIRONMENT=Development
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "Positions.ConsoleApp.dll"]

@@ -32,7 +32,22 @@ services:
       EXTERNALAPI__USEMOCK: "false"
       EXTERNALAPI__BATCHSIZE: "5000"
       EXTERNALAPI__TRUNCATEBEFOREIMPORT: "true"
+      EXTERNALAPI__MAXITEMS: "10000" 
       DOTNET_ENVIRONMENT: "Development"
+
+  api:
+    build:
+      context: .
+      dockerfile: Positions.Api/Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      ConnectionStrings__NPSqlConnection: "Host=postgres;Port=5432;Database=positionsdb;Username=admin;Password=admin;Pooling=true;MinPoolSize=10;MaxPoolSize=100;Connection Idle Lifetime=60;Timeout=60;Include Error Detail=true"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_ENVIRONMENT: "Development"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
 
 volumes:
   pgdata:

@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>a21639e5-ab89-491d-945c-0c8adec1fc34</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,10 @@
 		<None Update="Properties\launchSettings.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="appsettings*.json" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
 
