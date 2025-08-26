@@ -8,7 +8,10 @@ WORKDIR /src
 COPY ["Positions.Api/Positions.Api.csproj", "Positions.Api/"]
 COPY ["Positions.ConsoleApp/Positions.ConsoleApp.csproj", "Positions.ConsoleApp/"]
 RUN dotnet restore "./Positions.Api/Positions.Api.csproj"
+
 COPY . .
+RUN rm -f /src/Positions.ConsoleApp/appsettings*.json
+
 WORKDIR "/src/Positions.Api"
 RUN dotnet build "./Positions.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
